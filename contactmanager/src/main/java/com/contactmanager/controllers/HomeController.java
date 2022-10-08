@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class HomeController {
 
-	@RequestMapping("/home")
+	@RequestMapping("/")
 	public String home(Model model) {
 		
 		model.addAttribute("title" , "Home - Contact Manager");
@@ -21,6 +21,22 @@ public class HomeController {
 		model.addAttribute("title" , "About - Contact Manager");
 		
 		return "about";
+	}
+	
+	@RequestMapping("/signup")
+	public String signup(Model model) {
+		
+		model.addAttribute("title" , "Signup - Contact Manager");
+		
+		return "signup";
+	}
+	
+	@RequestMapping("/login")
+	public String login(Model model) {
+		
+		model.addAttribute("title" , "Login - Contact Manager");
+		
+		return "login";
 	}
 	
 }
