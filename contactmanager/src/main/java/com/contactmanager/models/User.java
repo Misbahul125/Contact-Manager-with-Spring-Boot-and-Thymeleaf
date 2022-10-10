@@ -12,6 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "User")
@@ -21,11 +23,16 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	
+	//server side validation of form
+	@NotBlank(message = "Name is required !!")
+	@Size(min=2 , max=50 , message="Name should range between 2 and 50 characters !!")
 	private String name;
 	
+	@NotBlank(message = "Email is required !!")
 	@Column(unique = true)
 	private String email;
 	
+	@NotBlank(message = "Password is required !!")
 	private String password;
 	
 	private String role;
@@ -34,6 +41,7 @@ public class User {
 	
 	private String imageURL;
 	
+	@Size(max=500 , message="Length should not be greater than 500 characters !!")
 	@Column(length = 500)
 	private String about;
 	

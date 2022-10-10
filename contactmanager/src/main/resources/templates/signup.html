@@ -19,11 +19,11 @@
 					<div class="my-card mt-2">
 
 						<div th:if="${session.message}" th:classappend="${session.message.type}"
-						 class="alert text-center" role="alert">
-							
+							class="alert text-center" role="alert">
+
 							<p th:text="${session.message.content}"></p>
 							<th:block th:text="${#session.removeAttribute('message')}"></th:block>
-							
+
 						</div>
 
 						<div class="container text-center">
@@ -34,34 +34,85 @@
 
 						<h1 class="text-center">Register here!!</h1>
 
-						<form th:action="@{/signupAction}" method="post" th:object="${user}">
+						<!-- name attributes of form fields 
+						should contain the same value/name as POJO class attribute  -->
+
+						<form novalidate="novalidate" th:action="@{/signupAction}" method="post" th:object="${user}">
 
 							<div class="form-group">
 								<label for="name">Name</label>
-								<input type="text" class="form-control" name="name" id="name"
-									aria-describedby="emailHelp" placeholder="Enter Name" th:value="${user.name}"
+								<input 
+									type="text" 
+									class="form-control" 
+									th:classappend="${#fields.hasErrors('name') ? 'is-invalid':''}"
+									name="name" 
+									id="name"
+									aria-describedby="emailHelp" 
+									placeholder="Enter Name" 
+									th:value="${user.name}"
 									required>
+
+								<div 
+								class="invalid-feedback" 
+								th:each="e : ${#fields.errors('name')}" th:text="${e}">
+								</div>
 
 							</div>
 
 							<div class="form-group">
 								<label for="email">Email</label>
-								<input type="email" class="form-control" name="email" id="email"
-									aria-describedby="emailHelp" placeholder="Enter Email" th:value="${user.email}"
+								<input 
+									type="email" 
+									class="form-control"
+									th:classappend="${#fields.hasErrors('email') ? 'is-invalid':''}"
+									name="email" 
+									id="email"
+									aria-describedby="emailHelp" 
+									placeholder="Enter Email" 
+									th:value="${user.email}"
 									required>
+									
+								<div 
+								class="invalid-feedback" 
+								th:each="e : ${#fields.errors('email')}" th:text="${e}">
+								</div>
 
 							</div>
 
 							<div class="form-group">
 								<label for="password">Password</label>
-								<input type="password" class="form-control" name="password" id="password"
+								<input 
+									type="password" 
+									class="form-control"
+									th:classappend="${#fields.hasErrors('password') ? 'is-invalid':''}" 
+									name="password" 
+									id="password"
 									placeholder="Enter Password">
+									
+								<div 
+								class="invalid-feedback" 
+								th:each="e : ${#fields.errors('password')}" th:text="${e}">
+								</div>
+								
 							</div>
 
 							<div class="form-group">
 								<label for="about">About</label>
-								<textarea id="about" class="form-control" name="about"
-									placeholder="Enter about yourself" rows="5" th:text="${user.about}"></textarea>
+								<textarea 
+									id="about" 
+									class="form-control"
+									th:classappend="${#fields.hasErrors('about') ? 'is-invalid':''}" 
+									name="about"
+									placeholder="Enter about yourself" 
+									rows="5" 
+									th:text="${user.about}">
+								</textarea>
+									
+								<div 
+								class="invalid-feedback" 
+								th:each="e : ${#fields.errors('about')}" th:text="${e}">
+								</div>
+								
 							</div>
 
 							<div class="form-group form-check text-center">

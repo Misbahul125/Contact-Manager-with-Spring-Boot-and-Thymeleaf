@@ -1,14 +1,15 @@
 package com.contactmanager.controllers;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.contactmanager.models.User;
@@ -63,7 +64,7 @@ public class HomeController {
 	//@RequestMapping(value = "/signupAction" , method = RequestMethod.POST)
 	@PostMapping("/signupAction")
 	public String signupAction(
-			@ModelAttribute("user") User user,
+			@Valid @ModelAttribute("user") User user,BindingResult bindingResult,
 			@RequestParam(value = "agreement" , defaultValue = "false") boolean agreement,
 			Model model,
 			HttpSession httpSession
@@ -74,6 +75,13 @@ public class HomeController {
 			if(!agreement) {
 				System.out.println("Please accept our terms and conditions");
 				throw new Exception("Please accept our terms and conditions");
+			}
+			
+			//server side validation of form
+			if(bindingResult.hasErrors()) {
+				System.out.println("ERROR" + bindingResult.toString());
+				model.addAttribute("user", user);
+				return "signup";
 			}
 			
 			if(user.getEmail().contains("@uem.edu.in")) {
