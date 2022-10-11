@@ -49,6 +49,10 @@ public class CustomConfiguration extends WebSecurityConfigurerAdapter {
 		.antMatchers("/user/**").hasRole("USER")
 		.antMatchers("/**").permitAll()
 		.and().formLogin().loginPage("/signIn")
+				/*
+				 * .loginProcessingUrl("/loginAction") .defaultSuccessUrl("/user/index")
+				 * .failureUrl("/login-fail")
+				 */
 		.and().csrf().disable();
 	}
 	
