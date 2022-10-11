@@ -1,0 +1,63 @@
+/*to hide sidebar in small screen*/
+@media only screen and (max-width: 600px){
+	.sidebar{
+		display: none;
+		width: 80%!important;
+		background-color: #FFFFFF;
+		height: 100vh;
+		position: fixed;
+		padding-top: 20px;
+	}
+	
+	.content {
+		margin-left: 0%!important;
+	}
+}
+
+.sidebar{
+	width: 18%;
+	background-color: #FFFFFF;
+	height: 100%;
+	position: fixed;
+	padding-top: 45px;
+}
+
+.sidebar a{
+	display: block;
+	width: 100%;
+	padding: 10px 25px;
+	text-decoration: none;
+	color: gray;
+}
+
+.sidebar a:hover{
+	background-color: #E2E2E2;
+}
+
+.sidebar .divider{
+	height: .5px;
+	width: 100%;
+	background-color: #E2E2E2;
+	margin-top: 10px;
+}
+
+.sidebar .side-icon{
+	margin-right: 10px;
+}
+
+.content{
+	margin-left: 20%;
+}
+
+.content .hamburger-icon{
+	cursor: pointer;
+	font-size: 25px;
+}
+
+.cross-btn{
+	position: absolute;
+	top: 0;
+	right: 35px;
+	font-size: 40px;
+	cursor: pointer;
+}

@@ -21,7 +21,6 @@ public class UserController {
 	public String dashboard(Model model , Principal principal) {
 		
 		User user = userRepository.getUserByUserName(principal.getName());
-		System.out.println(user);
 		
 		model.addAttribute("title", "Dashboard");
 		model.addAttribute("user", user);
