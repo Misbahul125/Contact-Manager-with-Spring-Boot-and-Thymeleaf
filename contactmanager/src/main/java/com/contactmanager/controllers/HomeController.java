@@ -4,6 +4,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,6 +20,9 @@ import com.contactmanager.utils.Message;
 
 @Controller
 public class HomeController {
+	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -85,12 +89,14 @@ public class HomeController {
 			}
 			
 			if(user.getEmail().contains("@uem.edu.in")) {
-				user.setRole(Constants.ADMIN_USER.toString());
+				user.setRole(Constants.ROLE_ADMIN.toString());
 			} else {
-				user.setRole(Constants.NORMAL_USER.toString());
+				user.setRole(Constants.ROLE_USER.toString());
 			}
 			
 			user.setActive(true);
+			
+			user.setPassword(passwordEncoder.encode(user.getPassword()));
 			
 			System.out.println(agreement);
 			System.out.println(user);
