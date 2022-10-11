@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,7 +46,7 @@ public class HomeController {
 		return "about";
 	}
 	
-	@RequestMapping("/signup")
+	@RequestMapping("/signUp")
 	public String signup(Model model) {
 		
 		model.addAttribute("title" , "Signup - Contact Manager");
@@ -54,7 +55,7 @@ public class HomeController {
 		return "signup";
 	}
 	
-	@RequestMapping("/login")
+	@RequestMapping("/signIn")
 	public String login(Model model) {
 		
 		model.addAttribute("title" , "Login - Contact Manager");
@@ -117,6 +118,14 @@ public class HomeController {
 			return "signup";
 		}
 		
+	}
+	
+	@PostMapping("/loginAction")
+	public String loginAction() {
+		
+		
+		
+		return "login";
 	}
 	
 }
