@@ -131,6 +131,4 @@ public class Contact {
 				+ description + ", user=" + user + "]";
 	}
 	
-	
-
 }

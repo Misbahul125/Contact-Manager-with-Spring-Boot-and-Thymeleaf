@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.contactmanager.models.Contact;
@@ -17,6 +18,8 @@ import com.contactmanager.repos.UserRepository;
 @RequestMapping("/user")
 public class UserController {
 	
+	private User user = null;
+	
 	@Autowired
 	private UserRepository userRepository;
 	
@@ -24,11 +27,13 @@ public class UserController {
 	@ModelAttribute
 	public void getUserData(Model model, Principal principal) {
 		
-		User user = userRepository.getUserByUserName(principal.getName());
+		user = userRepository.getUserByUserName(principal.getName());
 		
 		model.addAttribute("user", user);
 		
 	}
+	
+	//view URLs
 
 	@GetMapping("/index")
 	public String dashboard(Model model) {
@@ -45,6 +50,28 @@ public class UserController {
 		model.addAttribute("contact", new Contact());
 		
 		return "normal/add-contact";
+	}
+	
+	
+	
+	//processing URLs
+	
+	@PostMapping("/add-contact-action")
+	public String addContactAction(
+			@ModelAttribute("contact") Contact contact
+	) {
+		
+		//System.out.println(contact);
+		
+		contact.setUser(user);
+		user.getContacts().add(contact);
+		
+		this.userRepository.save(user);
+		
+		System.out.println("Contact added successfully");
+		
+		return "/normal/add-contact";
+		
 	}
 	
 }
