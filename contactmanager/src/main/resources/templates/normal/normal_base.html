@@ -23,7 +23,7 @@
 
 	<!-- navbar-->
 
-	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
 		<a class="navbar-brand" href="#">Contact Manager</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
 			aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,23 +55,23 @@
 
 	<!-- navbar-->
 	
-	<div class="sidebar">
+	<div class="sidebar mt-2">
 	
 		<span onclick="toggleSidebar()" class="cross-btn">&times;</span>
 	
-		<a href="#" class="item"><i class="fa-solid fa-house side-icon"></i>Home</a>
+		<a th:href="@{/user/index}" class="item"><i class="fa-solid fa-house side-icon"></i>Home</a>
 		<a href="#" class="item"><i class="fa-solid fa-user side-icon"></i>My Profile</a>
 		<a href="#" class="item"><i class="fa-solid fa-address-book side-icon"></i></i>My Contacts</a>
-		<a href="#" class="item"><i class="fa-solid fa-user-plus side-icon"></i>Add Contact</a>
+		<a th:href="@{/user/add-contact}" class="item"><i class="fa-solid fa-user-plus side-icon"></i>Add Contact</a>
 		<a href="#" class="item"><i class="fa-solid fa-gear side-icon"></i>Settings</a>
-		<a href="#" class="item"><i class="fa-solid fa-right-from-bracket side-icon"></i>Logout</a>
+		<a th:href="@{/logout}" class="item"><i class="fa-solid fa-right-from-bracket side-icon"></i>Logout</a>
 		
 		<div class="divider"></div>
 	
 	</div>
 
 
-	<div class="content">
+	<div class="content mt-5">
 	
 		<i onclick="toggleSidebar()" class="fa-solid fa-bars m-3 hamburger-icon"></i>
 	
