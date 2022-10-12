@@ -8,6 +8,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.contactmanager.models.Contact;
 import com.contactmanager.models.User;
 import com.contactmanager.repos.UserRepository;
+import com.contactmanager.utils.Message;
 
 @Controller
 @RequestMapping("/user")
@@ -65,7 +68,9 @@ public class UserController {
 
 	@PostMapping("/add-contact-action")
 	public String addContactAction(@ModelAttribute("contact") Contact contact,
-			@RequestParam("cImage") MultipartFile multipartFile) {
+			@RequestParam("cImage") MultipartFile multipartFile,
+			HttpSession httpSession
+	) {
 
 		try {
 			// System.out.println(contact);
@@ -82,6 +87,10 @@ public class UserController {
 				if(isImageUploadSuccessful(multipartFile, fName)) {
 					contact.setImage(fName);
 				}
+				else {
+					httpSession.setAttribute("message", new Message("Oops! Something went wrong, unable to upload image." , "alert-danger"));
+					return "/normal/add-contact";
+				}
 				
 			}
 			
@@ -89,11 +98,14 @@ public class UserController {
 			user.getContacts().add(contact);
 
 			this.userRepository.save(user);
+			
+			httpSession.setAttribute("message", new Message("Contact added successfully !!" , "alert-success"));
 
 			System.out.println("Contact added successfully");
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			httpSession.setAttribute("message", new Message("Oops! Something went wrong, unable to upload contact." , "alert-danger"));
 		}
 
 		return "/normal/add-contact";
