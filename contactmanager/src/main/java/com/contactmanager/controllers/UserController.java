@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.contactmanager.models.Contact;
 import com.contactmanager.models.User;
+import com.contactmanager.repos.ContactRepository;
 import com.contactmanager.repos.UserRepository;
 import com.contactmanager.utils.Message;
 
@@ -34,8 +36,11 @@ public class UserController {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private ContactRepository contactRepository;
 
-	// to be automatically called beforea controller perform its action
+	// to be automatically called before each controller perform its action
 	@ModelAttribute
 	public void getUserData(Model model, Principal principal) {
 
@@ -110,6 +115,17 @@ public class UserController {
 
 		return "/normal/add-contact";
 
+	}
+	
+	@GetMapping("/view-contacts")
+	public String getContacts(Model model) {
+		
+		List<Contact> contacts = this.contactRepository.getContactsByUserId(user.getId());
+
+		model.addAttribute("contacts", contacts);
+		model.addAttribute("title", "View Contacts");
+
+		return "normal/view-contacts";
 	}
 
 	public boolean isImageUploadSuccessful(MultipartFile multipartFile , String fName) {
