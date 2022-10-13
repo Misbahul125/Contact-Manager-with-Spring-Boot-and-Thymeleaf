@@ -128,7 +128,7 @@ public class Contact {
 	public String toString() {
 		return "Contact [contactId=" + contactId + ", firstName=" + firstName + ", secondName=" + secondName
 				+ ", email=" + email + ", work=" + work + ", phone=" + phone + ", image=" + image + ", description="
-				+ description + ", user=" + user + "]";
+				+ description + "]";
 	}
 	
 }
