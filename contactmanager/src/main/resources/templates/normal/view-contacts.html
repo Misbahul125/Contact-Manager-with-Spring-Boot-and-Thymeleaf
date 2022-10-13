@@ -32,8 +32,25 @@
 
 						<tr th:each="c : ${pagedContacts}">
 							<th scope="row" th:text="${'SM2022'+c.contactId}"></th>
-							<td th:text="${c.firstName+' '+c.secondName}"></td>
-							<td th:text="${c.email}"></td>
+							
+							<td>
+							
+								<img class="contact-picture" th:src="@{'/images/'+${c.image}}" />
+								
+								<span th:text="${c.firstName+' '+c.secondName}"></span>
+							
+							</td>
+							
+							<td>
+							
+								<a th:href="@{'/user/contact-detail/'+${c.contactId}}">
+								
+									<span th:text="${c.email}"></span>
+								
+								</a>
+							
+							</td>
+							
 							<td th:text="${c.phone}"></td>
 
 							<td>

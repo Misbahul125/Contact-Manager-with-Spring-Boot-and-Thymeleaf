@@ -88,6 +88,8 @@ public class UserController {
 			if (multipartFile.isEmpty()) {
 
 				System.out.println("File is empty");
+				
+				contact.setImage("user.png");
 
 			} else {
 
@@ -138,6 +140,20 @@ public class UserController {
 		model.addAttribute("title", "View Contacts");
 
 		return "normal/view-contacts";
+	}
+	
+	@GetMapping("/contact-detail/{contactId}")
+	public String viewContact(
+			Model model,
+			@PathVariable("contactId") int contactId
+	) {
+		
+		Contact contact = this.contactRepository.findById(contactId).get();
+		
+		model.addAttribute("contact", contact);
+		model.addAttribute("title", "Contact Detail");
+
+		return "normal/contact-detail";
 	}
 
 	public boolean isImageUploadSuccessful(MultipartFile multipartFile , String fName) {
