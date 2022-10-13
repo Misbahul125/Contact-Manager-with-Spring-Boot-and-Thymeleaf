@@ -7,7 +7,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
-import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -83,7 +82,6 @@ public class UserController {
 	) {
 
 		try {
-			// System.out.println(contact);
 
 			if (multipartFile.isEmpty()) {
 
@@ -113,8 +111,6 @@ public class UserController {
 			
 			httpSession.setAttribute("message", new Message("Contact added successfully !!" , "alert-success"));
 
-			System.out.println("Contact added successfully");
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			httpSession.setAttribute("message", new Message("Oops! Something went wrong, unable to upload contact." , "alert-danger"));
@@ -127,16 +123,24 @@ public class UserController {
 	@GetMapping("/view-contacts/{page}")
 	public String getContacts(
 			Model model,
-			@PathVariable("page") int page
+			@PathVariable("page") int page,
+			HttpSession httpSession
 	) {
 		
 		Pageable pageable = PageRequest.of(page, 2);
 		
 		Page<Contact> pagedContacts = this.contactRepository.getContactsByUserId(user.getId() , pageable);
+		
+		if(pagedContacts != null || pagedContacts.isEmpty()) {
+			model.addAttribute("currentPage", page);
+			model.addAttribute("totalPages", pagedContacts.getTotalPages());
+			model.addAttribute("pagedContacts", pagedContacts);
+			
+		}
+		else {
+			httpSession.setAttribute("message", new Message("Oops! There is/are not contact(s) to view. Add one to see." , "alert-danger"));
+		}
 
-		model.addAttribute("currentPage", page);
-		model.addAttribute("totalPages", pagedContacts.getTotalPages());
-		model.addAttribute("pagedContacts", pagedContacts);
 		model.addAttribute("title", "View Contacts");
 
 		return "normal/view-contacts";
@@ -145,12 +149,19 @@ public class UserController {
 	@GetMapping("/contact-detail/{contactId}")
 	public String viewContact(
 			Model model,
-			@PathVariable("contactId") int contactId
+			@PathVariable("contactId") int contactId,
+			HttpSession httpSession
 	) {
 		
 		Contact contact = this.contactRepository.findById(contactId).get();
 		
-		model.addAttribute("contact", contact);
+		if(user.getId() == contact.getUser().getId()) {
+			model.addAttribute("contact", contact);
+		}
+		else {
+			httpSession.setAttribute("message", new Message("Sorry! You are not authorized to view this particular contact." , "alert-danger"));
+		}
+		
 		model.addAttribute("title", "Contact Detail");
 
 		return "normal/contact-detail";

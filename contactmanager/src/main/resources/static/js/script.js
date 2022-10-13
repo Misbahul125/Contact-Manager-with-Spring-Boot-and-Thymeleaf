@@ -1,5 +1,3 @@
-console.log("success");
-
 const toggleSidebar = () => {
 
     if ($(".sidebar").is(":visible")) {

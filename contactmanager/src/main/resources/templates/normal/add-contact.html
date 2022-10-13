@@ -21,9 +21,8 @@
 
 						<div class="col-md-10 offset-md-1">
 
-							<form class="mt-2" th:object="${contact}" th:action="@{/user/add-contact-action}"
-								enctype="multipart/form-data" method="POST">
-
+							<form class="mt-2" action="" th:action="@{/user/add-contact-action}" method="post" enctype="multipart/form-data"
+								th:object="${contact}">
 
 								<div class="input-group">
 
@@ -108,20 +107,19 @@
 								<div class="form-group mt-3">
 
 									<textarea id="mytextarea" type="text" class="form-control" name="description"
-										rows="5" placeholder="Enter description" required></textarea>
+										rows="5" placeholder="Enter description"></textarea>
 								</div>
 
 								<div class="form-group">
 
-									<input type="file" onchange="readURL(this)" class="form-control" name="cImage"
-										required />
+									<input type="file" onchange="readURL(this)" class="form-control" name="cImage" />
 									<div class="container text-center">
 										<img id="imgFile" style="max-height: 250px; max-width: 100%;" />
 									</div>
 								</div>
 
 								<div class="container text-center">
-									<button class="btn btn-outline-success">Add Contact</button>
+									<button type="submit" class="btn btn-outline-success">Add Contact</button>
 
 									<button type="reset" class="btn btn-secondary">Reset</button>
 								</div>
