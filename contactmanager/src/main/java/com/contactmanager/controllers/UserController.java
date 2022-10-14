@@ -258,15 +258,21 @@ public class UserController {
 			
 			if(contact.getImage()!=null && !contact.getImage().isEmpty()) {
 				
-				if (!ImageHelper.deleteImage(contact.getImage())) {
-					httpSession.setAttribute("message", new Message("Oops! Something went wrong, unable to delete contact." , "alert-danger"));
-					return "redirect:/user/view-contacts/0";
+				//to prevent the default contact icon/image from getting deleted
+				if(!contact.getImage().matches("user.png")) {
+					
+					if (!ImageHelper.deleteImage(contact.getImage())) {
+						httpSession.setAttribute("message", new Message("Oops! Something went wrong, unable to delete contact." , "alert-danger"));
+						return "redirect:/user/view-contacts/0";
+					}
+					
 				}
 				
 			}
 			
 			contact.setUser(null);
 			this.contactRepository.delete(contact);
+			
 			httpSession.setAttribute("message", new Message("Contact deleted successfully." , "alert-success"));
 		}
 		else {
