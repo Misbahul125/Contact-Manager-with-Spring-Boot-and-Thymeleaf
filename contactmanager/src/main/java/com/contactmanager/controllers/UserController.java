@@ -199,7 +199,7 @@ public class UserController {
 			
 			  if (!multipartFile.isEmpty()) {
 				  
-				  if(oldImage != null && !oldImage.isEmpty()) {
+				  if(oldImage != null && !oldImage.isEmpty() && !oldImage.matches("user.png")) {
 					  
 					  if(!ImageHelper.deleteImage(originalContact.getImage())) {
 						  
