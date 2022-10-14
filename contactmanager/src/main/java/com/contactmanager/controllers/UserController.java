@@ -29,6 +29,7 @@ import com.contactmanager.models.Contact;
 import com.contactmanager.models.User;
 import com.contactmanager.repos.ContactRepository;
 import com.contactmanager.repos.UserRepository;
+import com.contactmanager.utils.ImageHelper;
 import com.contactmanager.utils.Message;
 
 @Controller
@@ -165,6 +166,38 @@ public class UserController {
 		model.addAttribute("title", "Contact Detail");
 
 		return "normal/contact-detail";
+	}
+	
+	@GetMapping("/delete-contact/{contactId}")
+	public String deleteContact(
+			Model model,
+			@PathVariable("contactId") int contactId,
+			HttpSession httpSession
+	) {
+		
+		Contact contact = this.contactRepository.findById(contactId).get();
+		
+		if(user.getId() == contact.getUser().getId()) {
+			
+			if(contact.getImage()!=null && !contact.getImage().isEmpty()) {
+				
+				if (!ImageHelper.deleteImage(contact.getImage())) {
+					httpSession.setAttribute("message", new Message("Oops! Something went wrong, unable to delete contact." , "alert-danger"));
+					return "redirect:/user/view-contacts/0";
+				}
+				
+			}
+			
+			contact.setUser(null);
+			this.contactRepository.delete(contact);
+			httpSession.setAttribute("message", new Message("Contact deleted successfully." , "alert-success"));
+		}
+		else {
+			httpSession.setAttribute("message", new Message("Sorry! You are not authorized to delete this particular contact." , "alert-danger"));
+		}
+		
+
+		return "redirect:/user/view-contacts/0";
 	}
 
 	public boolean isImageUploadSuccessful(MultipartFile multipartFile , String fName) {
