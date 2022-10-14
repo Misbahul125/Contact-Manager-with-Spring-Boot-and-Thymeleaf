@@ -21,8 +21,10 @@
 
 						<div class="col-md-10 offset-md-1">
 
-							<form class="mt-2" action="" th:action="@{/user/update-contact-action}" method="post" enctype="multipart/form-data"
+							<form class="mt-2" th:action="@{/user/update-contact-action}" method="post" enctype="multipart/form-data"
 								th:object="${contact}">
+								
+								<input class="form-control" type="hidden" th:value="${contact.contactId}" name="contactId"/>
 
 								<div class="input-group">
 
@@ -119,7 +121,7 @@
 								</div>
 
 								<div class="container text-center">
-									<button type="submit" class="btn btn-outline-success">Add Contact</button>
+									<button type="submit" class="btn btn-outline-success">Save Changes</button>
 
 									<button type="reset" class="btn btn-secondary">Reset</button>
 								</div>

@@ -188,39 +188,60 @@ public class UserController {
 	) {
 
 		try {
-
-			if (multipartFile.isEmpty()) {
-				
-				contact.setImage("user.png");
-
-			} else {
-
-				String originalName = multipartFile.getOriginalFilename();
-				String fName = originalName.substring(0 , originalName.lastIndexOf(".")) + "_" +System.currentTimeMillis() + originalName.substring(originalName.lastIndexOf("."));
-				
-				if(isImageUploadSuccessful(multipartFile, fName)) {
-					contact.setImage(fName);
-				}
-				else {
-					httpSession.setAttribute("message", new Message("Oops! Something went wrong, unable to upload image." , "alert-danger"));
-					return "/normal/add-contact";
-				}
-				
-			}
 			
-			contact.setUser(user);
-			user.getContacts().add(contact);
-
-			this.userRepository.save(user);
+			System.out.println(contact);
 			
-			httpSession.setAttribute("message", new Message("Contact added successfully !!" , "alert-success"));
+			Contact originalContact = this.contactRepository.findById(contact.getContactId()).get();
+			
+			String oldImage = originalContact.getImage();
+
+			originalContact = contact;
+			
+			  if (!multipartFile.isEmpty()) {
+				  
+				  if(oldImage != null && !oldImage.isEmpty()) {
+					  
+					  if(!ImageHelper.deleteImage(originalContact.getImage())) {
+						  
+						  System.out.println("Image file delete failed!!");
+						  httpSession.setAttribute("message", new Message("Oops! Something went wrong, unable to update contact." , "alert-danger"));
+						  return "/normal/update-contact";  
+						  
+					  }
+					  
+				  }
+				  
+				  String originalName = multipartFile.getOriginalFilename(); 
+				  String fName = originalName.substring(0 , originalName.lastIndexOf(".")) + "_" +System.currentTimeMillis() + originalName.substring(originalName.lastIndexOf("."));
+		  
+				  if(isImageUploadSuccessful(multipartFile, fName)) {
+					  originalContact.setImage(fName); 
+				  }
+				  else {
+					  System.out.println("Image file write failed!!");
+					  httpSession.setAttribute("message", new Message("Oops! Something went wrong, unable to update contact." , "alert-danger"));
+					  return "/normal/update-contact";
+			  	  }
+			  
+			  }
+			  else {
+				  originalContact.setImage(oldImage);
+			  }
+			  
+			  originalContact.setUser(user);
+			  
+			  this.contactRepository.save(originalContact);
+			  
+			  httpSession.setAttribute("message", new Message("Contact updated successfully !!" , "alert-success"));
+			  
+			  return "redirect:/user/contact-detail/"+originalContact.getContactId();
+			 
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			httpSession.setAttribute("message", new Message("Oops! Something went wrong, unable to upload contact." , "alert-danger"));
+			return "/normal/update-contact";
 		}
-
-		return "/normal/update-contact";
 
 	}
 	
