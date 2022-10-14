@@ -87,6 +87,15 @@ public class UserController {
 		return "normal/update-contact";
 	}
 
+	@GetMapping("/view-profile")
+	public String viewProfile(Model model) {
+		
+		model.addAttribute("title", "My Profile");
+		
+		return "/normal/view-profile";
+		
+	}
+	
 	// processing URLs
 
 	@PostMapping("/add-contact-action")
