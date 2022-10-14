@@ -72,6 +72,20 @@ public class UserController {
 
 		return "normal/add-contact";
 	}
+	
+	@PostMapping("/update-contact/{contactId}")
+	public String updateContact(
+			Model model,
+			@PathVariable("contactId") int contactId
+	) {
+
+		Contact contact = this.contactRepository.findById(contactId).get();
+		
+		model.addAttribute("title", "Update Contact");
+		model.addAttribute("contact", contact);
+
+		return "normal/update-contact";
+	}
 
 	// processing URLs
 
@@ -85,8 +99,6 @@ public class UserController {
 		try {
 
 			if (multipartFile.isEmpty()) {
-
-				System.out.println("File is empty");
 				
 				contact.setImage("user.png");
 
@@ -166,6 +178,50 @@ public class UserController {
 		model.addAttribute("title", "Contact Detail");
 
 		return "normal/contact-detail";
+	}
+	
+	@PostMapping("/update-contact-action")
+	public String updateContactAction(
+			@ModelAttribute("contact") Contact contact,
+			@RequestParam("cImage") MultipartFile multipartFile,
+			HttpSession httpSession
+	) {
+
+		try {
+
+			if (multipartFile.isEmpty()) {
+				
+				contact.setImage("user.png");
+
+			} else {
+
+				String originalName = multipartFile.getOriginalFilename();
+				String fName = originalName.substring(0 , originalName.lastIndexOf(".")) + "_" +System.currentTimeMillis() + originalName.substring(originalName.lastIndexOf("."));
+				
+				if(isImageUploadSuccessful(multipartFile, fName)) {
+					contact.setImage(fName);
+				}
+				else {
+					httpSession.setAttribute("message", new Message("Oops! Something went wrong, unable to upload image." , "alert-danger"));
+					return "/normal/add-contact";
+				}
+				
+			}
+			
+			contact.setUser(user);
+			user.getContacts().add(contact);
+
+			this.userRepository.save(user);
+			
+			httpSession.setAttribute("message", new Message("Contact added successfully !!" , "alert-success"));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			httpSession.setAttribute("message", new Message("Oops! Something went wrong, unable to upload contact." , "alert-danger"));
+		}
+
+		return "/normal/update-contact";
+
 	}
 	
 	@GetMapping("/delete-contact/{contactId}")
