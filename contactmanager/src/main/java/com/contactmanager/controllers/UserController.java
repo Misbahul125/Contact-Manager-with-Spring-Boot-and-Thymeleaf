@@ -126,6 +126,8 @@ public class UserController {
 				
 			}
 			
+			contact.setFullName(contact.getFirstName()+" "+contact.getSecondName());
+			
 			contact.setUser(user);
 			user.getContacts().add(contact);
 

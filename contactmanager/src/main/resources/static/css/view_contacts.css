@@ -1,3 +1,16 @@
+.search-container{
+	position: relative;
+}
+
+.search-result{
+	position: absolute;
+	background-color: white;
+	width: 100%;
+	padding: 10px;
+	border: 1px solid gray;
+	display: none;
+}
+
 .contact-picture{
 	width: 35px;
 	height: 35px;

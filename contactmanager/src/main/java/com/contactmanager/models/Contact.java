@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "Contact")
 public class Contact {
@@ -19,6 +21,8 @@ public class Contact {
 	private String firstName;
 	
 	private String secondName;
+	
+	private String fullName;
 	
 	private String email;
 	
@@ -32,18 +36,20 @@ public class Contact {
 	private String description;
 	
 	@ManyToOne
+	@JsonIgnore
 	private User user;
 
 	public Contact() {
 		super();
 	}
 
-	public Contact(int contactId, String firstName, String secondName, String email, String work, String phone,
-			String image, String description, User user) {
+	public Contact(int contactId, String firstName, String secondName, String fullName, String email, String work,
+			String phone, String image, String description, User user) {
 		super();
 		this.contactId = contactId;
 		this.firstName = firstName;
 		this.secondName = secondName;
+		this.fullName = firstName+" "+secondName;
 		this.email = email;
 		this.work = work;
 		this.phone = phone;
@@ -74,6 +80,14 @@ public class Contact {
 
 	public void setSecondName(String secondName) {
 		this.secondName = secondName;
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 
 	public String getEmail() {
@@ -123,12 +137,4 @@ public class Contact {
 	public void setUser(User user) {
 		this.user = user;
 	}
-
-	@Override
-	public String toString() {
-		return "Contact [contactId=" + contactId + ", firstName=" + firstName + ", secondName=" + secondName
-				+ ", email=" + email + ", work=" + work + ", phone=" + phone + ", image=" + image + ", description="
-				+ description + ", user=" + user + "]";
-	}
-	
 }
