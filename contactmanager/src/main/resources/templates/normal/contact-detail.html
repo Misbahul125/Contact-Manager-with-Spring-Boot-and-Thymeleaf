@@ -27,42 +27,46 @@
 
 					</div>
 
-					<table class="table mt-3">
+					<div class="table-responsive">
 
-						<thead>
-							<tr>
-								<th scope="col">ID</th>
-								<th scope="col">SM2022<span th:text="${contact.contactId}"></span></th>
+						<table class="table mt-3">
 
-							</tr>
-						</thead>
+							<thead class="thead-dark">
+								<tr>
+									<th scope="col">ID</th>
+									<th scope="col">SM2022<span th:text="${contact.contactId}"></span></th>
 
-						<tbody>
+								</tr>
+							</thead>
 
-							<tr>
-								<th scope="row">Email</th>
+							<tbody>
 
-								<td><span th:text="${contact.email}"></span></td>
+								<tr>
+									<th scope="row">Email</th>
 
-							</tr>
+									<td><span th:text="${contact.email}"></span></td>
 
-							<tr>
-								<th scope="row">Phone</th>
+								</tr>
 
-								<td><span th:text="${contact.phone}"></span></td>
+								<tr>
+									<th scope="row">Phone</th>
 
-							</tr>
+									<td><span th:text="${contact.phone}"></span></td>
 
-							<tr>
-								<th scope="row">Work</th>
+								</tr>
 
-								<td><span th:text="${contact.work}"></span></td>
+								<tr>
+									<th scope="row">Work</th>
 
-							</tr>
+									<td><span th:text="${contact.work}"></span></td>
 
-						</tbody>
+								</tr>
 
-					</table>
+							</tbody>
+
+						</table>
+
+					</div>
 
 					<div class="container">
 

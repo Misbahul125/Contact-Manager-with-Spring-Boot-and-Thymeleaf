@@ -15,104 +15,120 @@
 			<div class="card-body">
 
 				<h1 class="text-center">Your Contacts</h1>
-				
-				
+
+
 				<div class="search-container my-4">
-				
-					<input id="search-input" onkeyup="searchContacts()" type="text" class="form-control" placeholder="Search"/>
-					
+
+					<input id="search-input" onkeyup="searchContacts()" type="text" class="form-control"
+						placeholder="Search" />
+
 					<div class="search-result">
-					
+
 						<h3>This is search result</h3>
-						
+
 					</div>
-				
+
 				</div>
-				
-
-				<table class="table text-center">
-
-					<thead>
-						<tr>
-							<th scope="col">ID</th>
-							<th scope="col">NAME</th>
-							<th scope="col">EMAIL</th>
-							<th scope="col">PHONE</th>
-							<th scope="col">ACTION</th>
-						</tr>
-					</thead>
-
-					<tbody>
-
-						<tr th:each="c : ${pagedContacts}">
-							<th scope="row" th:text="${'SM2022'+c.contactId}"></th>
-							
-							<td>
-							
-								<img class="contact-picture" th:src="@{'/images/'+${c.image}}" />
-								
-								<span th:text="${c.firstName+' '+c.secondName}"></span>
-							
-							</td>
-							
-							<td>
-							
-								<a th:href="@{'/user/contact-detail/'+${c.contactId}}">
-								
-									<span th:text="${c.email}"></span>
-								
-								</a>
-							
-							</td>
-							
-							<td th:text="${c.phone}"></td>
-
-							<td>
-							
-							<form method="post" th:action="@{'/user/update-contact/'+${c.contactId}}">
-								<button class="btn btn-primary btn-sm">Edit</button>							
-							</form>
-								<a th:onclick="|deleteContact(${c.contactId})|" class="btn btn-danger btn-sm mt-2">Delete</a>
-
-							</td>
-						</tr>
-
-					</tbody>
-
-				</table>
 
 
-				 <nav aria-label="Page navigation example">
+				<div class="table-responsive">
+
+					<table class="table table-hover text-center">
+
+						<thead class="thead-dark">
+							<tr>
+								<th scope="col">ID</th>
+								<th scope="col">NAME</th>
+								<th scope="col">EMAIL</th>
+								<th scope="col">PHONE</th>
+								<th scope="col">ACTION</th>
+							</tr>
+						</thead>
+
+						<tbody>
+
+							<tr th:each="c : ${pagedContacts}">
+								<th scope="row" th:text="${'SM2022'+c.contactId}"></th>
+
+								<td>
+
+									<img class="contact-picture" th:src="@{'/images/'+${c.image}}" />
+
+									<span th:text="${c.firstName+' '+c.secondName}"></span>
+
+								</td>
+
+								<td>
+
+									<a th:href="@{'/user/contact-detail/'+${c.contactId}}">
+
+										<span th:text="${c.email}"></span>
+
+									</a>
+
+								</td>
+
+								<td th:text="${c.phone}"></td>
+
+								<td>
+
+									<form method="post" th:action="@{'/user/update-contact/'+${c.contactId}}">
+										<button class="btn btn-primary btn-sm">Edit</button>
+									</form>
+									<a th:onclick="|deleteContact(${c.contactId})|"
+										class="btn btn-danger btn-sm mt-2">Delete</a>
+
+								</td>
+							</tr>
+
+						</tbody>
+
+					</table>
+
+				</div>
+
+
+				<nav aria-label="Page navigation example">
 					<ul class="pagination">
-					
+
 						<li th:if="${currentPage != 0}" class="page-item">
 							<a class="page-link" th:href="@{'/user/view-contacts/'+${currentPage-1}}">
 								Previous
 							</a>
 						</li>
-						
-						<li th:classappend="${currentPage == i-1 ? 'active':''}" th:each="i : ${#numbers.sequence(1,totalPages)}" class="page-item">
-						
+
+						<li th:classappend="${currentPage == i-1 ? 'active':''}"
+							th:each="i : ${#numbers.sequence(1,totalPages)}" class="page-item">
+
 							<a class="page-link" th:href="@{'/user/view-contacts/'+${i-1}}">
-							
+
 								<span th:text="${i}"></span>
-							
+
 							</a>
-							
+
 						</li>
-						
+
 						<li th:if="${currentPage+1 != totalPages}" class="page-item">
 							<a class="page-link" th:href="@{'/user/view-contacts/'+${currentPage+1}}">
 								Next
 							</a>
 						</li>
-						
+
 					</ul>
-				</nav> 
+				</nav>
 
 			</div>
 
 		</div>
+		
+		<script>
+		
+			$(document).ready(() => {
+				$('.item').removeClass('active');
+				$('#view-contacts-link').addClass('active');
+			});
+		
+		</script>
 
 	</section>
 

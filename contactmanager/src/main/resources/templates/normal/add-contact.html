@@ -21,8 +21,8 @@
 
 						<div class="col-md-10 offset-md-1">
 
-							<form class="mt-2" action="" th:action="@{/user/add-contact-action}" method="post" enctype="multipart/form-data"
-								th:object="${contact}">
+							<form class="mt-2" action="" th:action="@{/user/add-contact-action}" method="post"
+								enctype="multipart/form-data" th:object="${contact}">
 
 								<div class="input-group">
 
@@ -142,6 +142,12 @@
 		<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 
 		<script>
+
+			$(document).ready(() => {
+				$('.item').removeClass('active');
+				$('#add-contact-link').addClass('active');
+			});
+
 
 			tinymce.init({
 				selector: '#mytextarea'
