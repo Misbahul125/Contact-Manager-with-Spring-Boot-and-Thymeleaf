@@ -14,29 +14,44 @@
 			<div class="container">
 				<div id="login-row" class="row justify-content-center align-items-center">
 					<div id="login-column" class="col-md-6">
-						<div id="login-box" style="height: 300px;" class="col-md-12">
-						
+						<div id="login-box" style="height: 420px;" class="col-md-12">
+
 							<div class="alert alert-success mt-3">OTP sent successfully.</div>
-						
-							<form id="login-form" class="form" th:action="@{/verifyOTP}" method="post">
-							
-								<h3 class="text-center text-info">OTP Verification</h3>
-								
-								<div class="form-group">
-								<label for="otp" class="text-info">OTP</label><br>
-									<input type="number" name="otp" id="otp" class="form-control" placeholder="Enter your OTP" required>
+
+							<div th:if="${session.message}" class="container text-center">
+
+								<div th:classappend="${session.message.type}" class="alert" role="alert">
+									<span th:text="${session.message.content}"></span>
 								</div>
-								
+
+								<th:block th:text="${#session.removeAttribute('message')}"></th:block>
+
+							</div>
+
+							<form id="login-form" class="form" th:action="@{/verifyOTPAction}" method="post">
+
+								<h3 class="text-center text-info">OTP Verification</h3>
+
+								<div class="form-group">
+									<label for="otp" class="text-info">OTP</label><br>
+									<input type="number" name="otp" id="otp" class="form-control"
+										placeholder="Enter your OTP" required>
+								</div>
+
 								<!-- <div class="form-group">
 									<label for="password" class="text-info">Password</label><br>
 									<input type="password" name="password" id="password" class="form-control">
 								</div> -->
 								
+								<!-- <h6 class="login-footer">Didn't receive an OTP?   <a th:href="@{/resendOTP}" class="mb-2">Click here to resend</a></h6> -->
+
 								<div class="form-group text-center">
-									<input type="submit" name="submit" class="btn btn-success btn-md mt-1" value="Verify">
+									<input type="submit" name="submit" class="btn btn-success btn-md mt-1"
+										value="Verify">
 								</div>
-								
+
 							</form>
+							
 						</div>
 					</div>
 				</div>

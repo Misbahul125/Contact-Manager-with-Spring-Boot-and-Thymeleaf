@@ -1,5 +1,6 @@
 package com.contactmanager.controllers;
 
+import java.security.Principal;
 import java.util.Random;
 
 import javax.servlet.http.HttpSession;
@@ -148,13 +149,50 @@ public class HomeController {
 			HttpSession httpSession
 	) {
 		
+		User user = this.userRepository.getUserByUserName(email);
+		
+		if(user != null) {
+			
+			Random rnd = new Random();
+	        int number = rnd.nextInt(999999);
+	        String otp =  String.format("%06d", number);
+
+	        if(this.emailService.sendEmail(new EmailData(email , otp))) {
+	        	
+	        	//httpSession.setAttribute("message", new Message("Email verified successfully !!" , "alert-success"));
+	        	httpSession.setAttribute("otp", otp);
+	        	httpSession.setAttribute("email", email);
+	        	return "verify-otp";
+	        }
+	        else {
+	        	httpSession.setAttribute("message", new Message("Unable to verify email !!" , "alert-danger"));
+	        	return "verify-email";
+	        }
+			
+		}
+		else {
+			
+			httpSession.setAttribute("message", new Message("User with this email ID doesn't exist !!" , "alert-danger"));
+        	return "verify-email";
+			
+		}
+	
+	}
+	
+	@PostMapping("/resendOTP")
+	public String resendOTP(
+			HttpSession httpSession
+	) {
+		
 		Random rnd = new Random();
         int number = rnd.nextInt(999999);
         String otp =  String.format("%06d", number);
+        
+        String email = (String) httpSession.getAttribute("email");
 
         if(this.emailService.sendEmail(new EmailData(email , otp))) {
         	
-        	httpSession.setAttribute("message", new Message("Email verified successfully !!" , "alert-success"));
+        	//httpSession.setAttribute("message", new Message("Email verified successfully !!" , "alert-success"));
         	httpSession.setAttribute("otp", otp);
         	return "verify-otp";
         }
@@ -163,6 +201,45 @@ public class HomeController {
         	return "verify-email";
         }
 	
+	}
+	
+	@PostMapping("/verifyOTPAction")
+	public String verifyOTPAction(
+			@RequestParam("otp") String otp,
+			HttpSession httpSession
+	) {
+		
+		String generatedOtp = (String) httpSession.getAttribute("otp");
+		String email = (String) httpSession.getAttribute("email");
+		
+		if(otp.matches(generatedOtp)) {
+			
+			httpSession.setAttribute("message", new Message("OTP verified successfully !!" , "alert-success"));
+			return "reset-password";
+		}
+		else {
+			
+			httpSession.setAttribute("message", new Message("Entered invalid OTP !!" , "alert-danger"));
+			return "verify-otp";
+		}
+	
+	}
+	
+	@PostMapping("/updatePassword")
+	public String updatePassword(
+			@RequestParam("newPassword") String newPassword,
+			Principal principal,
+			HttpSession httpSession
+	) {
+		
+		User user = userRepository.getUserByUserName(principal.getName());
+		
+		user.setPassword(this.bCryptPasswordEncoder.encode(newPassword));
+		this.userRepository.save(user);
+		
+		httpSession.setAttribute("message", new Message("Your password is updated successfully." , "alert-success"));
+		return "redirect:/user/index";
+		
 	}
 	
 }
