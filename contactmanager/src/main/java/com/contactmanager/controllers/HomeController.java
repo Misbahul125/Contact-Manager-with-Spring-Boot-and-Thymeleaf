@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.contactmanager.models.EmailData;
 import com.contactmanager.models.User;
 import com.contactmanager.repos.UserRepository;
+import com.contactmanager.service.EmailService;
 import com.contactmanager.utils.Constants;
 import com.contactmanager.utils.Message;
 
@@ -29,6 +31,9 @@ public class HomeController {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private EmailService emailService;
 
 	//view URLs
 	
@@ -139,18 +144,25 @@ public class HomeController {
 	
 	@PostMapping("/sendOTP")
 	public String sendOTP(
-			@RequestParam("username") String email
+			@RequestParam("username") String email,
+			HttpSession httpSession
 	) {
-		
-		System.out.println(email);
 		
 		Random rnd = new Random();
         int number = rnd.nextInt(999999);
         String otp =  String.format("%06d", number);
-        
-        System.out.println(otp);
-		
-		return "verify-otp";
+
+        if(this.emailService.sendEmail(new EmailData(email , otp))) {
+        	
+        	httpSession.setAttribute("message", new Message("Email verified successfully !!" , "alert-success"));
+        	httpSession.setAttribute("otp", otp);
+        	return "verify-otp";
+        }
+        else {
+        	httpSession.setAttribute("message", new Message("Unable to verify email !!" , "alert-danger"));
+        	return "verify-email";
+        }
+	
 	}
 	
 }
