@@ -28,13 +28,14 @@ import com.contactmanager.utils.Message;
 public class HomeController {
 	
 	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	@Autowired
 	private UserRepository userRepository;
 	
 	@Autowired
 	private EmailService emailService;
+	
 
 	//view URLs
 	
@@ -114,7 +115,7 @@ public class HomeController {
 			
 			user.setActive(true);
 			
-			user.setPassword(passwordEncoder.encode(user.getPassword()));
+			user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 			
 			System.out.println(agreement);
 			System.out.println(user);
@@ -228,17 +229,22 @@ public class HomeController {
 	@PostMapping("/updatePassword")
 	public String updatePassword(
 			@RequestParam("newPassword") String newPassword,
-			Principal principal,
 			HttpSession httpSession
 	) {
 		
-		User user = userRepository.getUserByUserName(principal.getName());
+		String email = (String) httpSession.getAttribute("email");
+		
+		User user = userRepository.getUserByUserName(email);
 		
 		user.setPassword(this.bCryptPasswordEncoder.encode(newPassword));
 		this.userRepository.save(user);
 		
 		httpSession.setAttribute("message", new Message("Your password is updated successfully." , "alert-success"));
-		return "redirect:/user/index";
+		
+		httpSession.removeAttribute("email");
+		httpSession.removeAttribute("otp");
+		
+		return "redirect:/signIn?source=reset_password";
 		
 	}
 	
