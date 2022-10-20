@@ -1,5 +1,7 @@
 package com.contactmanager.controllers;
 
+import java.util.Random;
+
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -63,6 +65,15 @@ public class HomeController {
 		return "login";
 	}
 	
+	@GetMapping("/verify-email")
+	public String verifyEmail(Model model) {
+		
+		model.addAttribute("title", "Verify Email");
+		
+		return "/verify-email";
+		
+	}
+	
 	
 	//processing URLs
 	
@@ -123,9 +134,23 @@ public class HomeController {
 	@PostMapping("/loginAction")
 	public String loginAction() {
 		
-		
-		
 		return "login";
+	}
+	
+	@PostMapping("/sendOTP")
+	public String sendOTP(
+			@RequestParam("username") String email
+	) {
+		
+		System.out.println(email);
+		
+		Random rnd = new Random();
+        int number = rnd.nextInt(999999);
+        String otp =  String.format("%06d", number);
+        
+        System.out.println(otp);
+		
+		return "verify-otp";
 	}
 	
 }
