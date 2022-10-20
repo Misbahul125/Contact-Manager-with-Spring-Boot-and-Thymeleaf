@@ -96,6 +96,15 @@ public class UserController {
 		
 	}
 	
+	@GetMapping("/settings")
+	public String viewSettings(Model model) {
+		
+		model.addAttribute("title", "Settings");
+		
+		return "/normal/settings";
+		
+	}
+	
 	// processing URLs
 
 	@PostMapping("/add-contact-action")
