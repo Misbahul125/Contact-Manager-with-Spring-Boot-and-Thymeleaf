@@ -15,6 +15,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +38,9 @@ import com.contactmanager.utils.Message;
 public class UserController {
 
 	private User user = null;
+	
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -301,6 +305,28 @@ public class UserController {
 		
 
 		return "redirect:/user/view-contacts/0";
+	}
+	
+	@PostMapping("/change-password")
+	public String changePassword(
+			@RequestParam("oldPassword") String oldPassword,
+			@RequestParam("newPassword") String newPassword,
+			HttpSession httpSession
+	) {
+		
+		if(this.bCryptPasswordEncoder.matches(oldPassword, this.user.getPassword())) {
+			
+			user.setPassword(this.bCryptPasswordEncoder.encode(newPassword));
+			this.userRepository.save(user);
+			
+			httpSession.setAttribute("message", new Message("Your password is updated successfully." , "alert-success"));
+			return "redirect:/user/index";
+		}
+		else {
+			httpSession.setAttribute("message", new Message("Your old password doesn't matches with current password!!" , "alert-danger"));
+			return "redirect:/user/settings";
+		}
+		
 	}
 
 	public boolean isImageUploadSuccessful(MultipartFile multipartFile , String fName) {
